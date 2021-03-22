@@ -4,11 +4,11 @@ import UsersRepository from '../repositories/UsersRepository';
 
 class UserController {
   async create(request: Request, response: Response) {
-    const { name, email } = request.body;
+    const { name, email } = request.body; 
 
-    const userRepository = getCustomRepository(UsersRepository);
+    const usersRepository = getCustomRepository(UsersRepository);
 
-    const userAlreadyExists = await userRepository.findOne({
+    const userAlreadyExists = await usersRepository.findOne({
       email,
     });
 
@@ -16,16 +16,24 @@ class UserController {
       return response.status(400).json({error: "User aleready exists!"});
     }
 
-    const user = userRepository.create({
+    const user = usersRepository.create({
       name, 
       email
     });
 
-    await userRepository.save(user);
+    await usersRepository.save(user);
 
     return response.json(user);
   }
 
+  async show(request: Request, response: Response) {
+    const usersRepository = getCustomRepository(UsersRepository)
+
+    const usersAll = await usersRepository.find()
+
+    return response.json(usersAll)
+  }
+  
 }
 
 export default UserController;
